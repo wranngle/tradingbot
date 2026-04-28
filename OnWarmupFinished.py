@@ -12,8 +12,7 @@ class OnWarmupFinishedHandler:
     def OnWarmupFinished(self):
         # Runs after the warmup period, regardless of static or dynamic universe.
     
-        self.algorithm.Debug(f"-------- Universe filtering and warmup complete. Symbol count: 
-                   {len(v.active_symbols)}")
+        self.algorithm.Debug(f"-------- Universe filtering and warmup complete. Symbol count: {len(v.active_symbols)}")
         
         for symbol in v.active_symbols:
             

@@ -61,9 +61,9 @@ class OnOrderEventHandler:
                     # If both a buy trade and a sell trade were both detected today, count today's date as a day trading date.
 
                 v.max_symbol_price = (
-                    self.Portfolio.TotalPortfolioValue * c.symbol_filter_parameter_max_symbol_price_portfolio_percent
-                    if c.symbol_filter_condition_max_symbol_price_portfolio_percent 
-                    else 0.95 * self.Portfolio.TotalPortfolioValue
+                    self.algorithm.Portfolio.TotalPortfolioValue * c.symbol_filter_parameter_max_symbol_price_portfolio_percent
+                    if c.symbol_filter_condition_max_symbol_price_portfolio_percent
+                    else 0.95 * self.algorithm.Portfolio.TotalPortfolioValue
                 ) # Set max price of symbols in the universe to what's defined in config.py, if not then 95%.
 
                 if orderEvent.Direction == OrderDirection.Buy:

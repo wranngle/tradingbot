@@ -248,9 +248,8 @@ def shouldBuy(algorithm, symbol, data):
             else:
                 return False, None
         else:
-            algorithm.Error(f"Error on shouldBuy: {str(e)}") 
             return False, None  # Return None if symbol is not in data or data[symbol] is None
-    
+
     except Exception as e:
-        algorithm.Error(f"Error on shouldBuy: {str(e)}") 
-        return False
+        algorithm.Error(f"Error on shouldBuy: {str(e)}")
+        return False, None

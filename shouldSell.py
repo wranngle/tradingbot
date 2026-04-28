@@ -10,12 +10,12 @@ def shouldSell(algorithm, symbol, data):
             # Obtain the Stop Loss and Take Profit price targets used.
             is_sell_condition_stop_loss_atr_price = v.stop_loss_atr_price[symbol] == v.take_profit_max_price[symbol]
             is_sell_condition_stop_loss_fibonacci_atr_price = v.stop_loss_fib_atr_price[symbol] == v.take_profit_max_price[symbol]
-            is_sell_condition_stop_loss_percent = v.stop_loss_percent_price[symbol] = v.take_profit_max_price[symbol]
-            is_sell_condition_stop_loss_trailing_percent = v.stop_loss_trailing_price[symbol] = v.take_profit_max_price[symbol]
-            is_sell_condition_take_profit_atr_price = v.take_profit_atr_price[symbol] = v.take_profit_max_price[symbol]
-            is_sell_condition_take_profit_fibonacci_atr_price = v.take_profit_fib_atr_price[symbol] = v.take_profit_max_price[symbol]
-            is_sell_condition_take_profit_percent = v.take_profit_percent_price[symbol] = v.take_profit_max_price[symbol]
-            is_sell_condition_take_profit_trailing_percent = v.take_profit_trailing_price[symbol] = v.take_profit_max_price[symbol]
+            is_sell_condition_stop_loss_percent = v.stop_loss_percent_price[symbol] == v.take_profit_max_price[symbol]
+            is_sell_condition_stop_loss_trailing_percent = v.stop_loss_trailing_price[symbol] == v.take_profit_max_price[symbol]
+            is_sell_condition_take_profit_atr_price = v.take_profit_atr_price[symbol] == v.take_profit_max_price[symbol]
+            is_sell_condition_take_profit_fibonacci_atr_price = v.take_profit_fib_atr_price[symbol] == v.take_profit_max_price[symbol]
+            is_sell_condition_take_profit_percent = v.take_profit_percent_price[symbol] == v.take_profit_max_price[symbol]
+            is_sell_condition_take_profit_trailing_percent = v.take_profit_trailing_price[symbol] == v.take_profit_max_price[symbol]
 
             # Price Target Condition
             is_sell_condition_price_target_met = v.current_price[symbol] >= v.take_profit_max_price[symbol] or v.current_price[symbol] <= v.stop_loss_max_price[symbol]
@@ -94,9 +94,8 @@ def shouldSell(algorithm, symbol, data):
                 return False, None
 
         else:
-            algorithm.Error(f"Error on shouldSell: {str(e)}")
             return False, None  # Return None if symbol is not in data or data[symbol] is None
-        
+
     except Exception as e:
         algorithm.Error(f"Error on shouldSell: {str(e)}")
-        return False
+        return False, None
