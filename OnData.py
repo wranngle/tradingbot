@@ -99,14 +99,16 @@ class OnDataHandler:
                 if order_ticket is not None and not order_ticket.OrderClosed:
                     order_time = self.algorithm.Time  # Current algorithm time
                     order_age = (order_time - order_ticket.Time).total_seconds() / 60  # Age in minutes
-                    
+                    order_age_minutes = int(order_age)
+
                     if order_age > c.max_pending_order_age_minutes:
                         order_ticket.Cancel("Order too old")
                         self.algorithm.Debug(f"Order {order_ticket.OrderId} for {symbol} cancelled due to timeout")
-                    
-                    # Log unfilled orders periodically (e.g., every 15 minutes)
-                    elif order_age % 15 == 0:
-                        self.algorithm.Debug(f"Order still pending: {order_ticket.Symbol}, Order Age: {order_age} minutes, Canceling in {c.max_submitted_order_minutes - order_age} minutes...")
+
+                    # Log unfilled orders periodically (every 15 minutes of age).
+                    # Compare on the integer-minute bucket so float drift doesn't skip the check.
+                    elif order_age_minutes > 0 and order_age_minutes % 15 == 0:
+                        self.algorithm.Debug(f"Order still pending: {order_ticket.Symbol}, Order Age: {order_age_minutes} minutes, Canceling in {c.max_pending_order_age_minutes - order_age_minutes} minutes...")
         
         except Exception as e:
             self.algorithm.Error(f"Error on HandleTradeOutcome: {str(e)}") 

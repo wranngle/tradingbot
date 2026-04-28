@@ -89,7 +89,7 @@ class OnOrderEventHandler:
                     if total_trades > 0:
                         v.win_probability = v.trade_win_count / total_trades
                         v.win_loss_ratio = v.total_profit / v.total_loss if v.total_loss != 0 else float('inf')  # 'inf' if no losses
-                        v.kelly_criterion = v.win_probability - ((1 - v.win_probability) / (v.win_loss_ratio if v.win_loss_ratio != 0 else float('inf')))
+                        v.kelly_criterion = v.win_probability - ((1 - v.win_probability) / v.win_loss_ratio)
                         self.algorithm.Debug(f"Updated Win Probability: {v.win_probability:.2f}, Win/Loss Ratio: {v.win_loss_ratio:.2f}, Kelly Criterion: {v.kelly_criterion:.2f}")
                             # Calculate Kelly Criterion
                         
