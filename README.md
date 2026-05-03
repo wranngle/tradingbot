@@ -2,6 +2,12 @@
 
 A multi-factor equity trading algorithm built for the [QuantConnect](https://www.quantconnect.com/) platform. It combines technical indicators (EMA crossovers, MACD, RSI, Stochastic, ATR breakouts), fundamental universe filtering (price, P/E, revenue growth, market cap), and risk-management rules (ATR / Fibonacci / trailing / fixed stop-loss and take-profit, Kelly-criterion position sizing, sector and portfolio caps, PDT-rule awareness).
 
+## Demo
+
+🎬 _Loom walkthrough coming soon — backtest dashboard + risk-control behavior._
+
+<!-- Replace with: <a href="https://www.loom.com/share/<id>"><img src="https://cdn.loom.com/sessions/thumbnails/<id>-with-play.gif" alt="Tradingbot demo"></a> -->
+
 > **Disclaimer:** This code is shared for educational and research purposes only. It is **not** financial advice and comes with **no warranty of profitability or correctness** (see `LICENSE`). Do not run it with real money without thoroughly understanding, testing, and modifying it for your own situation. Past backtest performance does not guarantee future results.
 
 ## Layout
