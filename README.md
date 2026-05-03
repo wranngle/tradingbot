@@ -1,26 +1,26 @@
 # tradingbot
 
-> quantConnect algorithm combining EMA crossovers, fundamental filtering, and Kelly position sizing.
+> a quantConnect equities algorithm combining technical indicators and Kelly position sizing.
 
-[![License](https://img.shields.io/github/license/wranngle/tradingbot?color=A371F7)](./LICENSE) ![Status](https://img.shields.io/badge/status-experimental-orange.svg)
+[![License](https://img.shields.io/github/license/wranngle/tradingbot?color=A371F7)](./LICENSE) ![Status](https://img.shields.io/badge/status-active-brightgreen.svg)
 
 > [!NOTE]
-> Experiment. Built to learn one specific thing. Code may not survive.
+> Active personal project. Used in my own workflow. Issues triaged on a personal-time cadence.
 
 ## What it does
 
-This algorithm evaluates equities on the QuantConnect platform using a mix of technical and fundamental factors. It filters the trading universe by price, P/E, revenue growth, and market cap. Entry and exit decisions rely on EMA crossovers, MACD, RSI, Stochastic, and ATR breakouts. It manages risk with dynamic stop-loss levels, sector and portfolio caps, and Kelly-criterion position sizing while remaining aware of the Pattern Day Trader (PDT) rule.
+You define your starting cash, trading window, and condition flags in a local configuration file. The algorithm filters the available universe of equities by price, P/E ratio, revenue growth, and market cap to locate viable targets. It executes entry and exit decisions based on EMA crossovers, MACD, RSI, Stochastic, and ATR breakouts. The bot sizes positions using the Kelly criterion and manages risk by calculating dynamic stop loss targets while enforcing sector allocation caps.
 
 ## Usage
 
-This code relies on the `AlgorithmImports` module injected by QuantConnect at runtime. It does not run as a standalone Python script.
+This code requires the `AlgorithmImports` module injected by the QuantConnect platform. It does not execute as a standalone script.
 
 1. Create a project via the QuantConnect dashboard or the `lean` CLI.
 2. Copy the Python files from this repository into the project root.
-3. Edit `config.py` to set your backtest dates, starting cash, condition flags, and parameter values.
+3. Edit `config.py` to set your backtest dates, starting cash, and parameter values.
 4. Run your backtest.
 
-To exercise the decision logic and price-target math locally without the QuantConnect engine:
+To verify the isolated decision logic and price math locally:
 
 ```bash
 pip install pytest
