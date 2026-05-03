@@ -1,53 +1,32 @@
 # tradingbot
 
-A multi-factor equity trading algorithm built for the [QuantConnect](https://www.quantconnect.com/) platform. It combines technical indicators (EMA crossovers, MACD, RSI, Stochastic, ATR breakouts), fundamental universe filtering (price, P/E, revenue growth, market cap), and risk-management rules (ATR / Fibonacci / trailing / fixed stop-loss and take-profit, Kelly-criterion position sizing, sector and portfolio caps, PDT-rule awareness).
+> quantConnect algorithm combining EMA crossovers, fundamental filtering, and Kelly position sizing.
 
-## Demo
+[![License](https://img.shields.io/github/license/wranngle/tradingbot?color=A371F7)](./LICENSE) ![Status](https://img.shields.io/badge/status-experimental-orange.svg)
 
-🎬 _Loom walkthrough coming soon — backtest dashboard + risk-control behavior._
+> [!NOTE]
+> Experiment. Built to learn one specific thing. Code may not survive.
 
-<!-- Replace with: <a href="https://www.loom.com/share/<id>"><img src="https://cdn.loom.com/sessions/thumbnails/<id>-with-play.gif" alt="Tradingbot demo"></a> -->
+## What it does
 
-> **Disclaimer:** This code is shared for educational and research purposes only. It is **not** financial advice and comes with **no warranty of profitability or correctness** (see `LICENSE`). Do not run it with real money without thoroughly understanding, testing, and modifying it for your own situation. Past backtest performance does not guarantee future results.
+This algorithm evaluates equities on the QuantConnect platform using a mix of technical and fundamental factors. It filters the trading universe by price, P/E, revenue growth, and market cap. Entry and exit decisions rely on EMA crossovers, MACD, RSI, Stochastic, and ATR breakouts. It manages risk with dynamic stop-loss levels, sector and portfolio caps, and Kelly-criterion position sizing while remaining aware of the Pattern Day Trader (PDT) rule.
 
-## Layout
+## Usage
 
-| File | Purpose |
-| --- | --- |
-| `main.py` | `QCAlgorithm` entry point; wires up event handlers. |
-| `config.py` | All tunable conditions and parameters. |
-| `variables.py` | Shared mutable state across handlers. |
-| `AddUniverse.py` | Static or dynamic (fundamentals-filtered) universe selection. |
-| `OnSecuritiesChanged.py` | Initializes indicators and consolidators when symbols enter/leave the universe. |
-| `OnWarmupFinished.py` | Logs the post-warmup universe snapshot. |
-| `OnData.py` | Per-bar logic: evaluates buy/sell, places orders, cancels stale ones. |
-| `OnOrderEvent.py` | Order fill bookkeeping: sector aggregates, day-trade counter, Kelly stats. |
-| `shouldBuy.py` / `shouldSell.py` | Buy / sell decision logic. |
-| `calculateStopLossPrice.py` / `calculateTakeProfitPrice.py` | Price-target math. |
-| `sectorAnalysis.py` | Sector-level portfolio aggregation helpers. |
-| `charts.py` | Persists indicator and position-size snapshots to the QC Object Store. |
-| `research.ipynb` | Scratch notebook for QC Research. |
+This code relies on the `AlgorithmImports` module injected by QuantConnect at runtime. It does not run as a standalone Python script.
 
-## Running
+1. Create a project via the QuantConnect dashboard or the `lean` CLI.
+2. Copy the Python files from this repository into the project root.
+3. Edit `config.py` to set your backtest dates, starting cash, condition flags, and parameter values.
+4. Run your backtest.
 
-This project is designed to run inside QuantConnect (cloud or `lean` CLI). It depends on the `AlgorithmImports` module that QC injects at runtime; it cannot run as a plain Python script.
-
-1. Create a project in the [QC dashboard](https://www.quantconnect.com/) or with the [`lean` CLI](https://www.quantconnect.com/docs/v2/lean-cli/installation/installing-lean-cli).
-2. Copy these files into the project root.
-3. Adjust `config.py` to taste (start/end dates, starting cash, condition flags, parameter values).
-4. Run a backtest.
-
-## Testing
-
-Unit tests live under `tests/` and run with `pytest`. They stub the QuantConnect-only `AlgorithmImports` module so the pure logic (price-target math, decision functions, universe filtering) can be exercised locally:
+To exercise the decision logic and price-target math locally without the QuantConnect engine:
 
 ```bash
 pip install pytest
 pytest
 ```
 
-Coverage is currently minimal — see `tests/conftest.py` for the QC stubs and `tests/README.md` for the priority list of areas still to cover.
+## License
 
-## QuantConnect docs
-
-<https://www.quantconnect.com/docs/v2/writing-algorithms>
+See [LICENSE](./LICENSE).
