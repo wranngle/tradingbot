@@ -2,7 +2,7 @@
 
 Report vulnerabilities privately through GitHub Private Vulnerability Reporting:
 
-https://github.com/wranngle/dotfiles/security/advisories/new
+https://github.com/wranngle/tradingbot/security/advisories/new
 
 If that link is unavailable, email cody@wranngle.com.
 
