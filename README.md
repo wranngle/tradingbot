@@ -1,26 +1,20 @@
 # tradingbot
 
-> a quantConnect equities algorithm combining technical indicators and Kelly position sizing.
-
-[![License](https://img.shields.io/github/license/wranngle/tradingbot?color=A371F7)](./LICENSE) ![Status](https://img.shields.io/badge/status-active-brightgreen.svg)
-
-> [!NOTE]
-> Active personal project. Used in my own workflow. Issues triaged on a personal-time cadence.
-
-## What it does
-
-You define your starting cash, trading window, and condition flags in a local configuration file. The algorithm filters the available universe of equities by price, P/E ratio, revenue growth, and market cap to locate viable targets. It executes entry and exit decisions based on EMA crossovers, MACD, RSI, Stochastic, and ATR breakouts. The bot sizes positions using the Kelly criterion and manages risk by calculating dynamic stop loss targets while enforcing sector allocation caps.
+QuantConnect equities strategy using a static or fundamental-filtered universe,
+technical entry signals, position sizing, and explicit stop-loss / take-profit
+targets.
 
 ## Usage
 
-This code requires the `AlgorithmImports` module injected by the QuantConnect platform. It does not execute as a standalone script.
+This project expects QuantConnect's `AlgorithmImports` runtime. It is not a
+standalone script.
 
-1. Create a project via the QuantConnect dashboard or the `lean` CLI.
-2. Copy the Python files from this repository into the project root.
-3. Edit `config.py` to set your backtest dates, starting cash, and parameter values.
-4. Run your backtest.
+1. Create a QuantConnect project in the dashboard or with the `lean` CLI.
+2. Copy these Python files into the project root.
+3. Edit `config.py` for dates, cash, universe, and strategy flags.
+4. Run the backtest.
 
-To verify the isolated decision logic and price math locally:
+Local logic tests use a small QuantConnect stub:
 
 ```bash
 pip install pytest

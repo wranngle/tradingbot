@@ -12,36 +12,38 @@ pytest
 
 ## What's covered
 
-- `calculateStopLossPrice` — branch coverage on each enabled stop-loss method
-  plus the `"Disabled"` regression.
+- `calculateStopLossPrice` — branch coverage on each enabled stop-loss method,
+  disabled-method handling, and nearest-retracement Fibonacci math.
+- `calculateTakeProfitPrice` — ATR direction, enabled-method selection, and
+  disabled-method handling.
+- `shouldBuy` — disabled buy conditions do not block enabled ones, empty Kelly
+  history does not force zero-share startup, PDT gating blocks when enabled,
+  and the portfolio-value buy floor is enforced.
 - `shouldSell` — pins down the `=` vs `==` regression and the tuple return
   contract.
+- `AddUniverse` — static ticker strings register cleanly, and malformed
+  fundamentals do not empty the dynamic universe.
+- `sectorAnalysis` — sector aggregation recomputes instead of accumulating
+  stale values.
+- `OnOrderEvent` — sell-fill profit uses absolute sold quantity so winning
+  exits do not count as losses.
+- `OnData` — invested symbols skip buy recalculation so existing sell targets
+  do not chase current price, and stale tickets are removed after cancellation.
+- `OnSecuritiesChanged` — one consolidator per symbol fans out to all
+  indicators.
 
 ## What's NOT yet covered (priority order)
 
-1. **`shouldBuy.py`** — by far the largest function in the codebase. Needs a
-   matrix of tests toggling each `c.buy_condition_*` flag and checking
-   position-size selection, the risk/reward early-exit, and the order-tag
-   payload shape.
-2. **`calculateTakeProfitPrice.py`** — same shape as the stop-loss tests.
-   Mostly covered by analogy but worth its own file.
-3. **`OnOrderEvent` Kelly-criterion math** — verify `win_probability`,
-   `win_loss_ratio`, and `kelly_criterion` are recomputed correctly across
-   a sequence of fills. (The current formula has a suspicious
-   `if v.win_loss_ratio != 0 else float('inf')` check on the just-assigned
-   variable — needs a product-side decision before testing.)
-4. **`AddUniverse.filterAndSortUniverse`** — pure data pipeline over a list
+1. **`OnOrderEvent` Kelly-criterion math** — broaden the current happy-path
+   test to cover mixed win/loss sequences and day-trade de-duplication.
+2. **`AddUniverse.filterAndSortUniverse`** — pure data pipeline over a list
    of fundamental fixtures. Verify each filter, the sort/slice chain
    (top-100 dollar-volume → top-50 P/E → bottom-10 market-cap), and the
    blacklist/min-price disabled paths.
-5. **`sectorAnalysis`** — sector aggregation, plus the `+=` accumulator in
-   `calculatePortfolioValueForSector` (currently never zeros prior values,
-   so repeated calls double-count).
-6. **`OnSecuritiesChanged`** — indicator/consolidator registration and
+3. **`OnSecuritiesChanged`** — indicator/consolidator registration and
    removal lifecycle.
-7. **`OnData.CancelOldOrders`** — the `order_age % 15 == 0` check on a float
-   will essentially never be true; worth a test that demonstrates the
-   intended behavior so it can be fixed.
+4. **`OnData` order submission branches** — add fixtures for buy limit orders,
+   partial take-profit exits, and full liquidation exits.
 
 ## Adding new tests
 

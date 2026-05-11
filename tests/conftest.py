@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import sys
 import types
+from collections import deque
 from pathlib import Path
 from unittest.mock import MagicMock
 
@@ -65,6 +66,7 @@ def _install_algorithm_imports_stub() -> None:
         Submitted = _Enum("Submitted")
         Filled = _Enum("Filled")
         Canceled = _Enum("Canceled")
+        Invalid = _Enum("Invalid")
         PartiallyFilled = _Enum("PartiallyFilled")
 
     # Indicator placeholder classes — tests should mock the instances.
@@ -156,8 +158,8 @@ def reset_variables():
         if attr.startswith("_"):
             continue
         value = getattr(v, attr)
-        if isinstance(value, (dict, set, list)):
-            snapshots[attr] = type(value)()
+        if isinstance(value, (dict, set, list, deque)):
+            snapshots[attr] = deque(maxlen=value.maxlen) if isinstance(value, deque) else type(value)()
             setattr(v, attr, snapshots[attr])
     yield v
 

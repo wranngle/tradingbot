@@ -1,45 +1,60 @@
 from AlgorithmImports import *
-import config as c
 import variables as v
 
-class sectorAnalysis:
-# Functions for getting sector info
-    
-    def getUniquePortfolioSectors(self):
-    # Gets the number of sectors in the portfolio.
-        try:
-            for symbol in self.Portfolio.Keys: # Iterate over all symbols in portfolio
-                if self.Portfolio[symbol].Invested: # If the portfolio is invested in this symbol
-                    v.symbol_sector[symbol] = symbol.AssetClassification.MorningstarSectorCode # Get the sector for this symbol
-                    v.unique_portfolio_sectors.add(v.symbol_sector[symbol]) # Add sector to the distinct list
-            return v.unique_portfolio_sectors # Return the final list of distinct portfolio sectors
-        
-        except Exception as e:
-            self.Error(f"Error on getUniquePortfolioSectors: {str(e)}")
-            return
 
-    def calculatePortfolioValueForSector (self, sector):
-    # Gets the total portfolio value for a provided sector 
-        try:    
-            for symbol in self.Portfolio.Keys: # Iterate over all symbols in portfolio
-                if self.Portfolio[symbol].Invested and self.Securities[symbol].Fundamentals.AssetClassification.MorningstarSectorCode == sector: # If the portfolio is invested in this symbol, and the sector for this symbol matches the sector being checked
-                    v.sector_portfolio_value[sector] += self.Portfolio[symbol].HoldingsValue # Adds the value of portfolio holdings for this symbol to the v.sector_portfolio_value[sector]
-            return v.sector_portfolio_value[sector] # Returns the total portfolio value for the provided sector
-        
-        except Exception as e:
-            self.Error(f"Error on calculatePortfolioValueForSector : {str(e)}")
-            return   
+def _portfolio_items(portfolio):
+    if hasattr(portfolio, "items"):
+        return portfolio.items()
+    return ((symbol, portfolio[symbol]) for symbol in portfolio.Keys)
 
-    def calculateSymbolCountsPerSector(self):
-    # Returns a list of symbol counts for each sector in the current portfolio.
+
+def _sector_for_symbol(algorithm, symbol):
+    security = algorithm.Securities[symbol]
+    return security.Fundamentals.AssetClassification.MorningstarSectorCode
+
+
+class SectorAnalysis:
+    @staticmethod
+    def getUniquePortfolioSectors(algorithm):
         try:
-            for symbol in self.Portfolio.Keys: # Iterate over all symbols in portfolio
-                if self.Portfolio[symbol].Invested: # If the portfolio is invested in this symbol
-                    v.symbol_sector[symbol] = self.Securities[symbol].Fundamentals.AssetClassification.MorningstarSectorCode # Get the sector for this symbol
-                    if v.symbol_sector[symbol]: # If sector was returned
-                        v.symbol_counts_per_sector[v.symbol_sector[symbol]] = v.symbol_counts_per_sector.get(v.symbol_sector[symbol], 0) + 1 # Increment the number of symbols for this sector 
-            return v.symbol_counts_per_sector # Return the  list of symbol counts per sector
-        
+            sectors = set()
+            for symbol, holding in _portfolio_items(algorithm.Portfolio):
+                if holding.Invested:
+                    v.symbol_sector[symbol] = _sector_for_symbol(algorithm, symbol)
+                    sectors.add(v.symbol_sector[symbol])
+            v.unique_portfolio_sectors = sectors
+            return sectors
         except Exception as e:
-            self.Error(f"Error on calculateSymbolCountsPerSector: {str(e)}")
-            return
+            algorithm.Error(f"Error on getUniquePortfolioSectors: {str(e)}")
+            return set()
+
+    @staticmethod
+    def calculatePortfolioValueForSector(algorithm, sector):
+        try:
+            total = 0
+            for symbol, holding in _portfolio_items(algorithm.Portfolio):
+                if holding.Invested and _sector_for_symbol(algorithm, symbol) == sector:
+                    total += holding.HoldingsValue
+            v.sector_portfolio_value[sector] = total
+            return total
+        except Exception as e:
+            algorithm.Error(f"Error on calculatePortfolioValueForSector: {str(e)}")
+            return 0
+
+    @staticmethod
+    def calculateSymbolCountsPerSector(algorithm):
+        try:
+            counts = {}
+            for symbol, holding in _portfolio_items(algorithm.Portfolio):
+                if holding.Invested:
+                    sector = _sector_for_symbol(algorithm, symbol)
+                    v.symbol_sector[symbol] = sector
+                    counts[sector] = counts.get(sector, 0) + 1
+            v.symbol_counts_per_sector = counts
+            return counts
+        except Exception as e:
+            algorithm.Error(f"Error on calculateSymbolCountsPerSector: {str(e)}")
+            return {}
+
+
+sectorAnalysis = SectorAnalysis
