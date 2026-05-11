@@ -1,4 +1,3 @@
-# Begin variables.py
 # This module stores dynamic, non-configurable variables used across the algorithm.
 
 import collections
@@ -11,7 +10,7 @@ indicator_warmup_counter = {}  # Tracks warmup progress
 daily_transactions = {}  # Track daily buys and sells for each security
 current_date = {}
 
-current_price = {} 
+current_price = {}
 current_close_price = {}
 indicators = {}
 consolidators = {}
@@ -46,7 +45,7 @@ symbol_sector = {}
 portfolio_percent_per_sector = {}
 biggest_portfolio_sector = {}
 max_symbol_price = 0
-active_symbols = {}
+active_symbols = set()
 
 # Orders
 order_ticket = None
@@ -63,5 +62,3 @@ total_loss = 0
 kelly_criterion = 0
 win_probability = 0
 win_loss_ratio = 0
-
-# End variables.py

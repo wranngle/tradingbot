@@ -50,7 +50,7 @@ def test_returns_max_of_enabled_methods(stop_loss_setup):
     result = calculateStopLossPrice(algo, stop_loss_setup, _data_slice(stop_loss_setup))
 
     # ATR:    100 - (2 * 2) = 96
-    # Fib+ATR: min(100*(1-0.236), 100*(1-0.382), 100*(1-0.618)) + 2 = 38.2 + 2 = 40.2
+    # Fib+ATR: max(100*(1-0.236), 100*(1-0.382), 100*(1-0.618)) - 2 = 76.4 - 2 = 74.4
     # Trailing: 100 * (1 - 0.10) = 90
     # Percent:  100 * (1 - 0.20) = 80  -- regression: this used to multiply by the
     # boolean flag instead of the parameter, producing 0.
@@ -68,6 +68,19 @@ def test_disabled_methods_do_not_raise_typeerror(stop_loss_setup, monkeypatch):
     algo = MagicMock()
     result = calculateStopLossPrice(algo, stop_loss_setup, _data_slice(stop_loss_setup))
     assert result == pytest.approx(96.0)
+
+
+def test_fibonacci_stop_uses_nearest_retracement(stop_loss_setup, monkeypatch):
+    import config as c
+    from calculateStopLossPrice import calculateStopLossPrice
+
+    monkeypatch.setattr(c, "sell_condition_stop_loss_atr_price", False)
+    monkeypatch.setattr(c, "sell_condition_stop_loss_trailing_percent", False)
+    monkeypatch.setattr(c, "sell_condition_stop_loss_percent", False)
+
+    algo = MagicMock()
+    result = calculateStopLossPrice(algo, stop_loss_setup, _data_slice(stop_loss_setup))
+    assert result == pytest.approx(74.4)
 
 
 def test_returns_none_when_symbol_missing_from_data(stop_loss_setup):
