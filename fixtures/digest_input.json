@@ -1,0 +1,22 @@
+{
+  "as_of": "2026-05-14",
+  "current_drawdown_pct": 0.082,
+  "max_drawdown_cap": 0.30,
+  "regime": "choppy",
+  "regime_confidence": 0.71,
+  "gauntlet_history": [
+    {"date": "2026-05-08", "strategy": "core", "outcome": "pass"},
+    {"date": "2026-05-09", "strategy": "experimental", "outcome": "veto", "reason": "leverage_cap"},
+    {"date": "2026-05-10", "strategy": "core", "outcome": "pass"},
+    {"date": "2026-05-11", "strategy": "core", "outcome": "pass"},
+    {"date": "2026-05-12", "strategy": "experimental", "outcome": "veto", "reason": "max_drawdown_cap"},
+    {"date": "2026-05-13", "strategy": "core", "outcome": "pass"},
+    {"date": "2026-05-14", "strategy": "core", "outcome": "pass"}
+  ],
+  "exposure_by_asset": {
+    "SPY": 0.42,
+    "QQQ": 0.18,
+    "IWM": 0.05,
+    "CASH": 0.35
+  }
+}

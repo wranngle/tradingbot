@@ -104,4 +104,7 @@ old/*
 
 # Dotfiles-tooling runtime artifacts (canonical: <repo>/.artifacts/<system>/<key>.<ext>)
 .artifacts/
+
+# Rendered risk-digest output
+out/
 # <<< dotfiles-managed gitignore <<<
