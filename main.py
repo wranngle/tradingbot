@@ -5,9 +5,15 @@ from OnSecuritiesChanged import OnSecuritiesChangedHandler
 from OnWarmupFinished import OnWarmupFinishedHandler
 from OnData import OnDataHandler
 from OnOrderEvent import OnOrderEventHandler
+from risk_gauntlet import RiskGauntlet, RiskGauntletError
 
 class CodysAdvancedStrategy(QCAlgorithm):
     def Initialize(self):
+        try:
+            RiskGauntlet().validate(c.Config())
+        except RiskGauntletError as err:
+            self.Debug(f"[risk-gauntlet] blocked algorithm load: {err}")
+            raise
         c.SetStartDate(self)
         c.SetEndDate(self)
         c.SetWarmUp(self)
