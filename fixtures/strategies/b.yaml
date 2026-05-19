@@ -1,0 +1,14 @@
+name: experimental-leveraged
+description: Higher-leverage candidate — expected to show worse black-swan drawdown.
+leverage: 3.5
+cash_weight: 0.05
+risk_per_trade_pct: 1.8
+max_drawdown_pct: 30.0
+max_position_weight: 0.32
+universe_size: 12
+universe:
+  - SPY
+  - QQQ
+  - IWM
+  - DIA
+  - GLD
