@@ -1,0 +1,8 @@
+stage: local
+notional_cap: 1000
+promotion_criteria:
+  min_paper_trades: 50
+  min_sharpe: 1.2
+  max_drawdown_pct: 0.15
+  min_paper_days: 30
+version: "0.1.0"
