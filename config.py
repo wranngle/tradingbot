@@ -115,3 +115,20 @@ sell_parameter_take_profit_percent_to_sell = 0.50
 sell_parameter_take_profit_price_atr_multiplier = 2
 sell_parameter_take_profit_trailing_percent = 0.10
 sell_parameter_rsi_max_threshold = 30
+
+
+max_drawdown_pct = 0.15
+leverage = 1.0
+max_position_pct = 0.10
+
+
+class Config:
+    def __init__(
+        self,
+        max_drawdown_pct: float = max_drawdown_pct,
+        leverage: float = leverage,
+        max_position_pct: float = max_position_pct,
+    ) -> None:
+        self.max_drawdown_pct = max_drawdown_pct
+        self.leverage = leverage
+        self.max_position_pct = max_position_pct
