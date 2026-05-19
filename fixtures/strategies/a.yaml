@@ -1,0 +1,14 @@
+name: baseline-core
+description: Conservative baseline used as the comparison anchor.
+leverage: 1.5
+cash_weight: 0.25
+risk_per_trade_pct: 0.75
+max_drawdown_pct: 22.0
+max_position_weight: 0.18
+universe_size: 25
+universe:
+  - SPY
+  - QQQ
+  - IWM
+  - DIA
+  - GLD
