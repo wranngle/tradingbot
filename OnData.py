@@ -4,7 +4,33 @@ from shouldSell import shouldSell
 import config as c
 import variables as v
 import json
+import os
 import charts
+
+EQUITY_LOG_PATH = os.path.join(os.path.dirname(__file__), "logs", "equity.jsonl")
+
+
+def emit_equity_bar(algorithm, path=EQUITY_LOG_PATH):
+    """Append one JSON line per bar with timestamp + portfolio equity.
+
+    Failures are swallowed: the equity ledger is observational; a write hiccup
+    must not interrupt the trading loop.
+    """
+    try:
+        equity = float(getattr(algorithm.Portfolio, "TotalPortfolioValue", 0.0))
+        cash = float(getattr(algorithm.Portfolio, "Cash", 0.0))
+        time = getattr(algorithm, "Time", None)
+        record = {
+            "time": time.isoformat() if hasattr(time, "isoformat") else str(time),
+            "equity": equity,
+            "cash": cash,
+        }
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "a", encoding="utf-8") as fh:
+            fh.write(json.dumps(record) + "\n")
+    except Exception:
+        return
+
 
 class OnDataHandler:
     def __init__(self, algorithm):
@@ -16,6 +42,7 @@ class OnDataHandler:
                 return
 
             else:
+                emit_equity_bar(self.algorithm)
                 self.CancelOldOrders()
                 for symbol in v.active_symbols:
                     if symbol in data:
